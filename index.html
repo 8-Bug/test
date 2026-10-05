@@ -1,482 +1,417 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT · 对话式AI助手</title>
-    <style>
-        /* 全局样式与重置 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>鹈鹕骑自行车</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: linear-gradient(#8fd3ff 0 68%, #d8f0a8 68% 84%, #7eae63 84% 100%);
+  }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(145deg, #f9fafc 0%, #eef1f7 100%);
-            color: #1a1f2e;
-            line-height: 1.6;
-            padding: 2rem 1.5rem;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+  .scene {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    min-height: 560px;
+  }
 
-        /* 主卡片容器 */
-        .card {
-            max-width: 1000px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 3rem;
-            padding: 2.5rem 2.5rem 2.8rem;
-            box-shadow: 
-                0 25px 45px -12px rgba(0, 0, 0, 0.15),
-                0 1px 3px rgba(0, 0, 0, 0.02),
-                inset 0 0 0 1px rgba(255, 255, 255, 0.6);
-            transition: all 0.2s ease;
-            border: 1px solid rgba(255, 255, 255, 0.7);
-        }
+  .sun {
+    position: absolute;
+    right: 8vw;
+    top: 7vh;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: #ffd85a;
+    box-shadow: 0 0 30px rgba(255,216,90,.65);
+  }
 
-        /* 头部区域 */
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
+  .cloud {
+    position: absolute;
+    width: 160px;
+    height: 52px;
+    background: rgba(255,255,255,.88);
+    border-radius: 40px;
+    animation: cloudMove 18s linear infinite;
+  }
+  .cloud::before, .cloud::after {
+    content: "";
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+  }
+  .cloud::before { width: 70px; height: 70px; left: 25px; top: -32px; }
+  .cloud::after  { width: 90px; height: 90px; right: 20px; top: -45px; }
+  .cloud.c1 { left: -180px; top: 16vh; }
+  .cloud.c2 { left: -340px; top: 28vh; transform: scale(.75); animation-delay: -8s; }
 
-        .logo-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #10a37f;
-            width: 60px;
-            height: 60px;
-            border-radius: 18px;
-            box-shadow: 0 10px 20px -8px rgba(16, 163, 127, 0.3);
-            color: white;
-            font-size: 2.2rem;
-            font-weight: 600;
-            transform: rotate(2deg);
-            transition: transform 0.2s;
-        }
+  @keyframes cloudMove {
+    to { transform: translateX(calc(100vw + 520px)); }
+  }
 
-        .logo-badge:hover {
-            transform: rotate(0deg) scale(1.02);
-        }
+  .road {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 19vh;
+    min-height: 110px;
+    background: #525252;
+    border-top: 8px solid #d7c89c;
+  }
 
-        .title-section h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, #0a2e1f 0%, #10a37f 70%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-        }
+  .road-line {
+    position: absolute;
+    bottom: 8vh;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        #f8ef95 0 90px,
+        transparent 90px 145px
+      );
+    animation: roadMove 1.1s linear infinite;
+  }
 
-        .title-section .subhead {
-            font-size: 1.1rem;
-            color: #4a5568;
-            font-weight: 400;
-            margin-top: 0.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-        }
+  @keyframes roadMove {
+    to { background-position-x: -145px; }
+  }
 
-        .subhead span {
-            background: #e6f7f2;
-            color: #0f6b52;
-            padding: 0.2rem 0.8rem;
-            border-radius: 30px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            letter-spacing: 0.02em;
-        }
+  .bike-wrap {
+    position: absolute;
+    left: 50%;
+    bottom: 9vh;
+    width: 560px;
+    height: 420px;
+    transform: translateX(-50%);
+    animation: bob .7s ease-in-out infinite alternate;
+  }
 
-        /* 介绍段落 */
-        .intro {
-            font-size: 1.2rem;
-            color: #2d3748;
-            background: #ffffffd6;
-            padding: 1.4rem 1.8rem;
-            border-radius: 2rem;
-            border-left: 6px solid #10a37f;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.05);
-            font-weight: 400;
-            line-height: 1.7;
-        }
+  @keyframes bob {
+    from { transform: translateX(-50%) translateY(0); }
+    to   { transform: translateX(-50%) translateY(-6px); }
+  }
 
-        .intro strong {
-            color: #0a2e1f;
-            font-weight: 600;
-        }
+  .wheel {
+    position: absolute;
+    bottom: 0;
+    width: 155px;
+    height: 155px;
+    border: 12px solid #202020;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at center, #222 0 7px, transparent 8px),
+      repeating-conic-gradient(from 0deg, #777 0deg 2deg, transparent 2deg 30deg);
+    animation: spin .9s linear infinite;
+  }
+  .wheel.left { left: 48px; }
+  .wheel.right { right: 48px; }
 
-        /* 功能网格 */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2.5rem;
-        }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-        .feature-item {
-            background: #ffffff;
-            border-radius: 1.8rem;
-            padding: 1.6rem 1.5rem;
-            box-shadow: 0 6px 18px -6px rgba(0, 0, 0, 0.08);
-            transition: all 0.25s ease;
-            border: 1px solid #e9edf4;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-        }
+  .frame {
+    position: absolute;
+    left: 120px;
+    bottom: 78px;
+    width: 310px;
+    height: 115px;
+  }
 
-        .feature-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 18px 30px -12px rgba(16, 163, 127, 0.2);
-            border-color: #b8e6d9;
-        }
+  .bar {
+    position: absolute;
+    height: 12px;
+    background: #db3b3b;
+    border-radius: 8px;
+    transform-origin: left center;
+    box-shadow: 0 2px 0 rgba(0,0,0,.15);
+  }
+  .bar.a { width: 165px; left: 30px; top: 50px; transform: rotate(-2deg); }
+  .bar.b { width: 150px; left: 120px; top: 57px; transform: rotate(-52deg); }
+  .bar.c { width: 155px; left: 48px; top: 85px; transform: rotate(-48deg); }
+  .bar.d { width: 120px; left: 48px; top: 86px; transform: rotate(3deg); }
+  .bar.e { width: 112px; left: 196px; top: 50px; transform: rotate(57deg); }
 
-        .feature-icon {
-            background: #e6f7f2;
-            color: #0f6b52;
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 1rem;
-            font-weight: 500;
-        }
+  .fork {
+    position: absolute;
+    width: 10px;
+    height: 118px;
+    background: #263238;
+    right: 122px;
+    bottom: 93px;
+    transform: rotate(-8deg);
+    border-radius: 8px;
+  }
 
-        .feature-item h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.4rem;
-            color: #0b2b20;
-            letter-spacing: -0.01em;
-        }
+  .handle {
+    position: absolute;
+    width: 88px;
+    height: 10px;
+    background: #263238;
+    right: 86px;
+    bottom: 205px;
+    transform: rotate(-5deg);
+    border-radius: 8px;
+  }
 
-        .feature-item p {
-            color: #4a5568;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+  .seat {
+    position: absolute;
+    left: 245px;
+    bottom: 205px;
+    width: 72px;
+    height: 15px;
+    background: #222;
+    border-radius: 16px;
+    transform: rotate(-4deg);
+  }
 
-        /* 技术亮点 / 两列布局 */
-        .tech-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.8rem;
-            margin-bottom: 2.5rem;
-        }
+  .seat-post {
+    position: absolute;
+    left: 275px;
+    bottom: 164px;
+    width: 9px;
+    height: 50px;
+    background: #263238;
+    transform: rotate(-8deg);
+  }
 
-        .tech-card {
-            background: #ffffff;
-            border-radius: 1.8rem;
-            padding: 1.8rem 1.8rem;
-            box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e9edf4;
-        }
+  .pedal {
+    position: absolute;
+    left: 268px;
+    bottom: 95px;
+    width: 24px;
+    height: 24px;
+    border: 7px solid #222;
+    border-radius: 50%;
+  }
+  .pedal::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 5px;
+    width: 58px;
+    height: 7px;
+    background: #222;
+    transform-origin: left center;
+    animation: crank .9s linear infinite;
+  }
+  @keyframes crank { to { transform: rotate(360deg); } }
 
-        .tech-card h2 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            color: #0a2e1f;
-            margin-bottom: 1.2rem;
-            letter-spacing: -0.01em;
-            border-bottom: 2px solid #e0f0ea;
-            padding-bottom: 0.7rem;
-        }
+  .pelican {
+    position: absolute;
+    left: 160px;
+    bottom: 178px;
+    width: 260px;
+    height: 220px;
+  }
 
-        .tech-card ul {
-            list-style: none;
-        }
+  .body {
+    position: absolute;
+    left: 70px;
+    top: 72px;
+    width: 135px;
+    height: 118px;
+    background: #f7f4ea;
+    border: 4px solid #4c4c4c;
+    border-radius: 55% 48% 52% 45%;
+    transform: rotate(-8deg);
+  }
 
-        .tech-card li {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.8rem;
-            margin-bottom: 0.9rem;
-            font-size: 1rem;
-            color: #2d3748;
-        }
+  .wing {
+    position: absolute;
+    left: 86px;
+    top: 98px;
+    width: 100px;
+    height: 68px;
+    background: #d9dde0;
+    border: 4px solid #4c4c4c;
+    border-radius: 60% 38% 60% 45%;
+    transform: rotate(8deg);
+  }
 
-        .tech-card li::before {
-            content: "✓";
-            color: #10a37f;
-            font-weight: 700;
-            background: #e6f7f2;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.8rem;
-            flex-shrink: 0;
-            margin-top: 0.1rem;
-        }
+  .neck {
+    position: absolute;
+    left: 134px;
+    top: 21px;
+    width: 52px;
+    height: 105px;
+    background: #f7f4ea;
+    border: 4px solid #4c4c4c;
+    border-radius: 45% 50% 25% 25%;
+    transform: rotate(8deg);
+  }
 
-        /* 应用场景 */
-        .use-cases {
-            background: #f4f9f7;
-            border-radius: 2rem;
-            padding: 1.8rem 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #d2ebe3;
-        }
+  .head {
+    position: absolute;
+    left: 125px;
+    top: 0;
+    width: 80px;
+    height: 72px;
+    background: #f7f4ea;
+    border: 4px solid #4c4c4c;
+    border-radius: 50%;
+  }
 
-        .use-cases h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: #0a2e1f;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
+  .eye {
+    position: absolute;
+    left: 174px;
+    top: 21px;
+    width: 10px;
+    height: 10px;
+    background: #111;
+    border-radius: 50%;
+    z-index: 3;
+  }
 
-        .use-case-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-        }
+  .beak {
+    position: absolute;
+    left: 185px;
+    top: 34px;
+    width: 108px;
+    height: 25px;
+    background: #f4a43a;
+    border: 4px solid #4c4c4c;
+    border-left: 0;
+    border-radius: 0 70% 60% 0;
+    transform: rotate(4deg);
+    transform-origin: left center;
+  }
 
-        .tag {
-            background: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 40px;
-            font-weight: 500;
-            font-size: 0.95rem;
-            color: #1a3b2f;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-            border: 1px solid #cde3db;
-            transition: all 0.15s;
-        }
+  .pouch {
+    position: absolute;
+    left: 178px;
+    top: 49px;
+    width: 92px;
+    height: 47px;
+    background: #f2b25f;
+    border: 4px solid #4c4c4c;
+    border-top: 0;
+    border-radius: 0 0 65% 65%;
+    transform: rotate(6deg);
+  }
 
-        .tag:hover {
-            background: #10a37f;
-            color: white;
-            border-color: #10a37f;
-            transform: scale(1.02);
-            cursor: default;
-        }
+  .leg {
+    position: absolute;
+    width: 12px;
+    height: 82px;
+    background: #e39138;
+    border-radius: 10px;
+    transform-origin: top center;
+  }
+  .leg.one { left: 120px; top: 162px; transform: rotate(22deg); }
+  .leg.two { left: 161px; top: 158px; transform: rotate(-18deg); }
 
-        /* 脚注 / 版本信息 */
-        .footer-note {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px dashed #cbd5e0;
-            font-size: 0.9rem;
-            color: #5a6b7c;
-        }
+  .foot {
+    position: absolute;
+    width: 40px;
+    height: 9px;
+    background: #e39138;
+    border-radius: 10px;
+  }
+  .foot.one { left: 125px; top: 232px; transform: rotate(15deg); }
+  .foot.two { left: 142px; top: 227px; transform: rotate(-10deg); }
 
-        .badge-openai {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            background: #eef1f7;
-            padding: 0.4rem 1rem;
-            border-radius: 30px;
-            font-weight: 500;
-            color: #1a3b2f;
-        }
+  .arm {
+    position: absolute;
+    left: 171px;
+    top: 123px;
+    width: 75px;
+    height: 12px;
+    background: #d9dde0;
+    border: 3px solid #4c4c4c;
+    border-radius: 12px;
+    transform: rotate(-28deg);
+    transform-origin: left center;
+  }
 
-        .badge-openai i {
-            font-style: normal;
-            font-size: 1.1rem;
-        }
+  .title {
+    position: absolute;
+    left: 50%;
+    top: 6vh;
+    transform: translateX(-50%);
+    padding: 12px 24px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.78);
+    backdrop-filter: blur(8px);
+    color: #253443;
+    font-size: clamp(24px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: .05em;
+    box-shadow: 0 8px 24px rgba(0,0,0,.12);
+  }
 
-        /* 响应式调整 */
-        @media (max-width: 700px) {
-            body {
-                padding: 1rem;
-            }
+  .hint {
+    position: absolute;
+    left: 50%;
+    top: 15vh;
+    transform: translateX(-50%);
+    color: rgba(20,40,50,.72);
+    font-size: 15px;
+  }
 
-            .card {
-                padding: 1.8rem 1.3rem 2rem;
-                border-radius: 2rem;
-            }
-
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.8rem;
-            }
-
-            .title-section h1 {
-                font-size: 1.9rem;
-            }
-
-            .intro {
-                font-size: 1.05rem;
-                padding: 1rem 1.2rem;
-            }
-
-            .tech-section {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .use-cases {
-                padding: 1.3rem;
-            }
-
-            .footer-note {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        /* 细微动画 */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(8px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .card > * {
-            animation: fadeIn 0.5s ease backwards;
-        }
-
-        .card > *:nth-child(1) { animation-delay: 0.05s; }
-        .card > *:nth-child(2) { animation-delay: 0.1s; }
-        .card > *:nth-child(3) { animation-delay: 0.15s; }
-        .card > *:nth-child(4) { animation-delay: 0.2s; }
-        .card > *:nth-child(5) { animation-delay: 0.25s; }
-        .card > *:nth-child(6) { animation-delay: 0.3s; }
-
-        /* 选中文字颜色 */
-        ::selection {
-            background: #10a37f30;
-            color: #0a2e1f;
-        }
-    </style>
+  @media (max-width: 650px) {
+    .bike-wrap { transform: translateX(-50%) scale(.72); }
+    @keyframes bob {
+      from { transform: translateX(-50%) scale(.72) translateY(0); }
+      to   { transform: translateX(-50%) scale(.72) translateY(-6px); }
+    }
+  }
+</style>
 </head>
 <body>
-    <div class="card">
-        <!-- 头部区域 -->
-        <div class="header">
-            <div class="logo-badge">⌨️</div>
-            <div class="title-section">
-                <h1>ChatGPT</h1>
-                <div class="subhead">
-                    由 OpenAI 打造 · 对话式 AI 助手
-                    <span>GPT-4o / GPT-4</span>
-                </div>
-            </div>
-        </div>
+  <div class="scene">
+    <div class="sun"></div>
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
 
-        <!-- 简介 -->
-        <div class="intro">
-            <strong>ChatGPT</strong> 是一款基于大规模语言模型（LLM）的对话式人工智能，能够理解自然语言并生成连贯、有逻辑且富有创造力的回应。它不仅能回答问题、撰写文章、编写代码，还能进行头脑风暴、翻译、总结等——就像一个随时在线的智能伙伴。
-        </div>
+    <div class="title">鹈鹕骑自行车 🚲</div>
+    <div class="hint">纯 HTML + CSS 动画，无需图片素材</div>
 
-        <!-- 核心功能网格 -->
-        <div class="features-grid">
-            <div class="feature-item">
-                <div class="feature-icon">💬</div>
-                <h3>自然对话</h3>
-                <p>像与真人交谈一样，支持多轮上下文，理解你的意图并给出贴切的回复。</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">📝</div>
-                <h3>内容创作</h3>
-                <p>协助撰写邮件、报告、故事、诗歌，还能润色与改写，激发创作灵感。</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🧮</div>
-                <h3>编程助手</h3>
-                <p>生成代码片段、调试错误、解释算法，支持数十种编程语言与框架。</p>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon">🌐</div>
-                <h3>多语言</h3>
-                <p>流利翻译与交流，覆盖中文、英文、西班牙文、法文等主流语言。</p>
-            </div>
-        </div>
+    <div class="bike-wrap">
+      <div class="wheel left"></div>
+      <div class="wheel right"></div>
 
-        <!-- 技术亮点（两列） -->
-        <div class="tech-section">
-            <div class="tech-card">
-                <h2>⚙️ 技术内核</h2>
-                <ul>
-                    <li>基于 Transformer 架构，千亿级参数模型</li>
-                    <li>强化学习与人类反馈（RLHF）调优</li>
-                    <li>支持长上下文（最高 128K tokens）</li>
-                    <li>多模态能力（识别图片、分析图表）</li>
-                    <li>强大的推理与指令遵循能力</li>
-                </ul>
-            </div>
-            <div class="tech-card">
-                <h2>✨ 版本亮点</h2>
-                <ul>
-                    <li><strong>GPT-4o</strong> · 更快的响应，全能多模态</li>
-                    <li><strong>GPT-4</strong> · 深度推理，复杂任务处理</li>
-                    <li><strong>GPT-3.5</strong> · 免费畅聊，高效日常助手</li>
-                    <li>联网搜索 / 插件扩展（部分版本）</li>
-                    <li>高级数据分析与文件上传支持</li>
-                </ul>
-            </div>
-        </div>
+      <div class="frame">
+        <div class="bar a"></div>
+        <div class="bar b"></div>
+        <div class="bar c"></div>
+        <div class="bar d"></div>
+        <div class="bar e"></div>
+      </div>
 
-        <!-- 应用场景标签云 -->
-        <div class="use-cases">
-            <h2>📌 常见应用场景</h2>
-            <div class="use-case-tags">
-                <span class="tag">智能客服</span>
-                <span class="tag">学习辅导</span>
-                <span class="tag">文案生成</span>
-                <span class="tag">代码审查</span>
-                <span class="tag">创意写作</span>
-                <span class="tag">数据分析</span>
-                <span class="tag">邮件撰写</span>
-                <span class="tag">翻译润色</span>
-                <span class="tag">头脑风暴</span>
-                <span class="tag">知识问答</span>
-                <span class="tag">角色扮演</span>
-            </div>
-        </div>
+      <div class="fork"></div>
+      <div class="handle"></div>
+      <div class="seat"></div>
+      <div class="seat-post"></div>
+      <div class="pedal"></div>
 
-        <!-- 脚注 / 版本信息 -->
-        <div class="footer-note">
-            <div class="badge-openai">
-                <i>🤖</i> OpenAI · 持续进化中
-            </div>
-            <div style="display: flex; gap: 1.5rem;">
-                <span>📅 知识截止: 2026年</span>
-                <span>🔒 隐私与安全设计</span>
-            </div>
-        </div>
+      <div class="pelican">
+        <div class="body"></div>
+        <div class="wing"></div>
+        <div class="neck"></div>
+        <div class="head"></div>
+        <div class="eye"></div>
+        <div class="beak"></div>
+        <div class="pouch"></div>
+        <div class="arm"></div>
+        <div class="leg one"></div>
+        <div class="leg two"></div>
+        <div class="foot one"></div>
+        <div class="foot two"></div>
+      </div>
     </div>
+
+    <div class="road">
+      <div class="road-line"></div>
+    </div>
+  </div>
 </body>
 </html>
